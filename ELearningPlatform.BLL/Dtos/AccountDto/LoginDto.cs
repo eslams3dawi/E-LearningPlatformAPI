@@ -8,7 +8,7 @@ namespace ELearningPlatform.BLL.Dtos.AccountDto
 {
     public class LoginDto
     {
-        public string Name { get; set; }
+        public string Email { get; set; }
         public string Password { get; set; }
     }
 }

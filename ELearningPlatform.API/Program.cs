@@ -27,12 +27,15 @@ namespace ELearningPlatform
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
-            //Register the context
+            // Add DbContext with SQL Server
             builder.Services.AddDbContext<ELearningContext>(options =>
                 options.UseSqlServer
                 (builder.Configuration.GetConnectionString
                 ("Server = ESLAMS3DAWY; Database = ELearningPlatform; Integrated Security = True; Trust Server Certificate = True")));
-
+            
+            // Register Identity with DbContext
+            builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
+                            .AddEntityFrameworkStores<ELearningContext>();
 
             builder.Services.AddScoped<IStudentRepository, StudentRepository>();
             builder.Services.AddScoped<IStudentService, StudentService>();
@@ -42,16 +45,20 @@ namespace ELearningPlatform
             builder.Services.AddScoped<ICourseRepository, CourseRepository>();
             builder.Services.AddScoped<IAccountService, AccountService>();
 
-            builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
-                .AddEntityFrameworkStores<ELearningContext>();
+
 
             //------------//
             builder.Services.AddAuthentication(option =>
             {
                 option.DefaultAuthenticateScheme = "eslam";
+                //Checks if the token is valid
+
                 option.DefaultChallengeScheme = "eslam";
+                //the action if the token is invalid 
+
             }).AddJwtBearer("eslam", options =>
             {
+                //Get the secret key to be able to generate another signature to be compared
                 var securitykeystring = builder.Configuration.GetSection("SecretKey").Value;
                 var securtykeyByte = Encoding.ASCII.GetBytes(securitykeystring);
                 SecurityKey securityKey = new SymmetricSecurityKey(securtykeyByte);
@@ -59,14 +66,17 @@ namespace ELearningPlatform
                 options.TokenValidationParameters = new TokenValidationParameters()
                 {
                     IssuerSigningKey = securityKey,
+
+                  //Identity the front URL that will use that API, to be more secure 
                     //ValidAudience = "url" ,
                     //ValidIssuer = "url",
+
+                  //false if there is no specific front URL
                     ValidateIssuer = false,
                     ValidateAudience = false
                 };
             });
             //------------//
-
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -77,7 +87,7 @@ namespace ELearningPlatform
             }
 
             app.UseHttpsRedirection();
-
+            app.UseAuthentication();
             app.UseAuthorization();
 
 

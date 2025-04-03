@@ -23,28 +23,32 @@ namespace ELearningPlatform.BLL.Services.AccountService
             _userManager = userManager;
             _configuration = configuration;
         }
-        public async Task<string> Login(LoginDto loginDto)
+        public async Task<string> LoginAsync(LoginDto loginDto)
         {
-            var user = await _userManager.FindByNameAsync(loginDto.Name);
+            var user = await _userManager.FindByEmailAsync(loginDto.Email);
             if (user == null)
                 return null;
 
             var CheckPassword = await _userManager.CheckPasswordAsync(user, loginDto.Password);
-            if (!CheckPassword)/////
+            if (!CheckPassword)
                 return null;
 
+            //Send the claims of the user to generate his token
             var claims = await _userManager.GetClaimsAsync(user);
             return GenerateToken(claims);
         }
 
-        public async Task<string> Register(RegisterDto registerDto)
+        public async Task<string> RegisterAsync(RegisterDto registerDto)
         {
             //Mapping .. RegisterDto → User
             ApplicationUser user = new ApplicationUser();
 
-            user.Email = registerDto.Email;
-            user.UserName = registerDto.Name;
+            if (registerDto.Password != registerDto.ConfirmPassword)
+                return "Passwords do not match!";
 
+            user.Email = registerDto.Email;
+            user.UserName = registerDto.Email;//--//
+            
             var result = await _userManager.CreateAsync(user, registerDto.Password);//Hash the password, through passing the user & password
 
             if (result.Succeeded)
@@ -54,7 +58,7 @@ namespace ELearningPlatform.BLL.Services.AccountService
                 List<Claim> claims = new List<Claim>();
 
                 claims.Add(new Claim("Role", "Admin"));
-                claims.Add(new Claim("Name", registerDto.Name));
+                claims.Add(new Claim("Email", registerDto.Email));
 
                 //Store the claims on database when registration, because the user will want them when login
                 await _userManager.AddClaimsAsync(user, claims);
@@ -84,7 +88,11 @@ namespace ELearningPlatform.BLL.Services.AccountService
             //3. Identify the expiry date
             var expire = DateTime.UtcNow.AddDays(7); //The Token will be expired after one week
                                                      //Add all above parts to the token
-            JwtSecurityToken jwtSecurityToken = new JwtSecurityToken(claims: claims, expires: expire, signingCredentials: signingCredentials);
+            JwtSecurityToken jwtSecurityToken = new JwtSecurityToken(
+                claims: claims,
+                expires: expire,
+                signingCredentials: signingCredentials
+                );
 
             //Convert SecurityToken type into string
             JwtSecurityTokenHandler handler = new JwtSecurityTokenHandler();

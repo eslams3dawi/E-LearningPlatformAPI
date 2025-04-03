@@ -9,7 +9,7 @@ namespace ELearningPlatform.BLL.Services.AccountService
 {
     public interface IAccountService
     {
-        Task<string> Login(LoginDto loginDto);
-        Task<string> Register(RegisterDto registerDto);
+        Task<string> LoginAsync(LoginDto loginDto);
+        Task<string> RegisterAsync(RegisterDto registerDto);
     }
 }

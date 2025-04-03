@@ -10,15 +10,15 @@ namespace ELearningPlatform.API.Controllers
     public class AccountController : ControllerBase
     {
         private readonly IAccountService _accountService;
-        public AccountController(IAccountService accountService) //Inject the IConfiguration to access to appsettings
+        public AccountController(IAccountService accountService)
         {
             _accountService = accountService;
         }
 
-        [HttpPost("Login")]
-        public async Task<ActionResult> Login(LoginDto loginDto)
+        [HttpPost("LoginAsync")]
+        public async Task<ActionResult> LoginAsync(LoginDto loginDto)
         {
-            var token = await _accountService.Login(loginDto);
+            var token = await _accountService.LoginAsync(loginDto);
 
             if (token != null)
             {
@@ -27,10 +27,10 @@ namespace ELearningPlatform.API.Controllers
             return Unauthorized();
         }
 
-        [HttpPost("Register")]
-        public async Task<ActionResult> Register(RegisterDto registerDto)
+        [HttpPost("RegisterAsync")]
+        public async Task<ActionResult> RegisterAsync(RegisterDto registerDto)
         {
-            var token = await _accountService.Register(registerDto);
+            var token = await _accountService.RegisterAsync(registerDto);
 
             if (token != null)
             {
