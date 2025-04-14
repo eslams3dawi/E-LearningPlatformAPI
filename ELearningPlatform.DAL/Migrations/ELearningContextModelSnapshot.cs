@@ -24,8 +24,8 @@ namespace ELearningPlatform.DAL.Migrations
 
             modelBuilder.Entity("CourseStudent", b =>
                 {
-                    b.Property<string>("CoursesCourseId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("CoursesCourseId")
+                        .HasColumnType("int");
 
                     b.Property<int>("StudentsStudentId")
                         .HasColumnType("int");
@@ -102,15 +102,33 @@ namespace ELearningPlatform.DAL.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
+            modelBuilder.Entity("ELearningPlatform.DAL.Models.Category", b =>
+                {
+                    b.Property<int>("CategoryId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CategoryId"));
+
+                    b.Property<string>("CategoryName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("CategoryId");
+
+                    b.ToTable("Categories");
+                });
+
             modelBuilder.Entity("ELearningPlatform.DAL.Models.Course", b =>
                 {
-                    b.Property<string>("CourseId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("CourseId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
 
-                    b.Property<string>("Category")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CourseId"));
+
+                    b.Property<int?>("CategoryId")
+                        .HasColumnType("int");
 
                     b.Property<string>("CourseName")
                         .IsRequired()
@@ -124,6 +142,8 @@ namespace ELearningPlatform.DAL.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("CourseId");
+
+                    b.HasIndex("CategoryId");
 
                     b.HasIndex("InstructorId");
 
@@ -357,10 +377,17 @@ namespace ELearningPlatform.DAL.Migrations
 
             modelBuilder.Entity("ELearningPlatform.DAL.Models.Course", b =>
                 {
+                    b.HasOne("ELearningPlatform.DAL.Models.Category", "Category")
+                        .WithMany("Courses")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
                     b.HasOne("ELearningPlatform.DAL.Models.Instructor", "Instructor")
                         .WithMany("Courses")
                         .HasForeignKey("InstructorId")
                         .OnDelete(DeleteBehavior.SetNull);
+
+                    b.Navigation("Category");
 
                     b.Navigation("Instructor");
                 });
@@ -414,6 +441,11 @@ namespace ELearningPlatform.DAL.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("ELearningPlatform.DAL.Models.Category", b =>
+                {
+                    b.Navigation("Courses");
                 });
 
             modelBuilder.Entity("ELearningPlatform.DAL.Models.Instructor", b =>

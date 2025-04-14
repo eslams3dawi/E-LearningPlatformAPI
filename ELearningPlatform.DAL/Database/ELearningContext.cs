@@ -33,6 +33,12 @@ namespace ELearningPlatform.DAL.Database
                 .HasMany(c => c.Students)
                 .WithMany(s => s.Courses);
 
+            modelBuilder.Entity<Course>()
+                .HasOne(c => c.Category)
+                .WithMany(c => c.Courses)
+                .HasForeignKey(c => c.CategoryId)
+                .OnDelete(DeleteBehavior.SetNull);
+
             modelBuilder.ApplyConfiguration(new CourseConfigurations());
             modelBuilder.ApplyConfiguration(new InstructorConfigurations());
             modelBuilder.ApplyConfiguration(new StudentConfigurations());
@@ -43,5 +49,6 @@ namespace ELearningPlatform.DAL.Database
         public DbSet<Student> Students { get; set; }
         public DbSet<Instructor> Instructors { get; set; }
         public DbSet<Course> Courses { get; set; }
+        public DbSet<Category> Categories { get; set; }
     }  
 }

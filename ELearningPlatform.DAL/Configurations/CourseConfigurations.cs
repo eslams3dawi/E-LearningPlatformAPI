@@ -15,8 +15,8 @@ namespace ELearningPlatform.DAL.Configurations
         {
             builder.Property(c => c.CourseName)
                 .HasMaxLength(40);
-            builder.Property(c => c.Category)
-                .HasMaxLength(50);
+            //builder.Property(c => c.Category)
+            //    .HasMaxLength(50);
         }
     }
 }

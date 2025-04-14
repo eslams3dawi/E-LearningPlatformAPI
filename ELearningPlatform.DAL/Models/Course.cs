@@ -8,14 +8,16 @@ namespace ELearningPlatform.DAL.Models
 {
     public class Course
     {
-        public string CourseId { get; set; }
+        public int CourseId { get; set; }
         public string CourseName { get; set; }
-        public string Category { get; set; }
-        public DateTime CreationDate { get; set; }
+        public DateTime CreationDate { get; set; } = DateTime.UtcNow;
 
         public ICollection<Student> Students { get; set; }
 
         public int? InstructorId { get; set; }
         public Instructor Instructor { get; set; }
+
+        public int? CategoryId { get; set; }
+        public Category Category { get; set; }
     }
 }
