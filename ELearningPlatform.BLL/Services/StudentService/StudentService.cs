@@ -1,4 +1,5 @@
 ﻿using ELearningPlatform.BLL.Dtos.StudentDto;
+using ELearningPlatform.BLL.ExtensionMethods;
 using ELearningPlatform.DAL.Models;
 using ELearningPlatform.DAL.Repository.StudentRepository;
 using System;
@@ -17,14 +18,14 @@ namespace ELearningPlatform.BLL.Services.StudentService
             _studentRepository = studentRepository;
         }
 
-        public void AddStudent(StudentAddDto studentDto)
+        public void AddStudent(StudentAddDto studentAddDto)
         {
             var studentModel = new Student()
             {
-                FirstName = studentDto.FirstName,
-                LastName = studentDto.LastName,
-                Age = studentDto.Age,
-                Gender = studentDto.Gender,
+                FirstName = studentAddDto.FirstName,
+                LastName = studentAddDto.LastName,
+                Age = studentAddDto.Age,
+                Gender = studentAddDto.Gender,
                 EnrollmentDate = DateTime.UtcNow
             };
             _studentRepository.Add(studentModel);
@@ -33,25 +34,27 @@ namespace ELearningPlatform.BLL.Services.StudentService
         public void DeleteStudent(int id)
         {
             var studentModel = _studentRepository.GetById(id);
+            id.CheckForException<Student>(studentModel);
             _studentRepository.Delete(studentModel);
         }
 
         public StudentReadDto GetStudentById(int id)
         {
             var studentModel = _studentRepository.GetById(id);
-
+            id.CheckForException<Student>(studentModel);
             var studentDto = new StudentReadDto()
             {
                 StudentId = studentModel.StudentId,
                 FirstName = studentModel.FirstName,
                 LastName = studentModel.LastName,
                 Age = studentModel.Age,
-                Gender = studentModel.Gender
+                Gender = studentModel.Gender,
+                EnrollmentDate = studentModel.EnrollmentDate
             };
             return studentDto;
         }
 
-        public IQueryable<StudentReadDto> GetStudents()
+        public IEnumerable<StudentReadDto> GetStudents()
         {
             return _studentRepository.Get().Select(s => new StudentReadDto()
             {
@@ -59,18 +62,19 @@ namespace ELearningPlatform.BLL.Services.StudentService
                 FirstName = s.FirstName,
                 LastName = s.LastName,
                 Age = s.Age,
-                Gender = s.Gender
+                Gender = s.Gender,
+                EnrollmentDate = s.EnrollmentDate
             });
         }
 
-        public void UpdateStudent(int id, StudentUpdateDto studentDto)
+        public void UpdateStudent(int id, StudentUpdateDto studentUpdateDto)
         {
             var studentModel = _studentRepository.GetById(id);
-
-            studentModel.FirstName = studentDto.FirstName;
-            studentModel.LastName = studentDto.LastName;
-            studentModel.Age = studentDto.Age;
-            studentModel.Gender = studentDto.Gender;
+            id.CheckForException<Student>(studentModel);
+            studentModel.FirstName = studentUpdateDto.FirstName;
+            studentModel.LastName = studentUpdateDto.LastName;
+            studentModel.Age = studentUpdateDto.Age;
+            studentModel.Gender = studentUpdateDto.Gender;
 
             _studentRepository.Update(studentModel);
         }

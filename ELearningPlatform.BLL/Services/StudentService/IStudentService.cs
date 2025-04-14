@@ -9,10 +9,10 @@ namespace ELearningPlatform.BLL.Services.StudentService
 {
     public interface IStudentService
     {
-        void AddStudent(StudentAddDto studentDto);
-        IQueryable<StudentReadDto> GetStudents();
+        void AddStudent(StudentAddDto studentAddDto);
+        IEnumerable<StudentReadDto> GetStudents();
         StudentReadDto GetStudentById(int id);
-        void UpdateStudent(int id, StudentUpdateDto studentDto);
+        void UpdateStudent(int id, StudentUpdateDto studentUpdateDto);
         void DeleteStudent(int id);
     }
 }
