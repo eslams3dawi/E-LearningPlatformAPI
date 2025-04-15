@@ -4,22 +4,37 @@ A **RESTful API** for an **E-Learning Platform** built using **.NET Core**, foll
 
 ## 📌 **Features**  
 
-- ✅ **Generic Repository Pattern** – Flexible and reusable data access layer  
-- ✅ **N-Tier Architecture** – Improved separation of concerns  
-- ✅ **JWT Authentication & Authorization** – Secure user authentication using ASP.NET Core Identity & JWT  
-- ✅ **DTOs (Data Transfer Objects)** – Efficient data transfer between layers  
-- ✅ **Swagger UI Integration** – Interactive API documentation for easy testing  
-- ✅ **RESTful API Design** – Well-structured endpoints for seamless front-end integration  
+- ✅ **Generic Repository Pattern** for reusable and clean data access logic  
+- ✅ **N-Tier Architecture** for better separation of concerns  
+- ✅ **JWT Authentication & Authorization** using ASP.NET Core Identity  
+- ✅ **DTOs** for efficient and secure data exchange  
+- ✅ **RESTful API Design** to support seamless front-end integration  
+- ✅ **Caching** (e.g., MemoryCache or DistributedCache) to enhance performance  
+- ✅ **Global Exception Handling** via custom middleware  
+- ✅ **Custom Filters** for logging, validation, and other cross-cutting concerns  
+- ✅ **Custom Middleware** for request/response manipulation and centralized logging  
+- ✅ **CORS Configuration** to enable safe cross-origin communication
 
-## 🏗️ **Technologies Used**  
+## 🛠️ Technologies Used
 
-- **.NET Core** (ASP.NET Web API)  
-- **Entity Framework Core** (EF Core)  
-- **SQL Server**  
-- **ASP.NET Core Identity** for Authentication & Authorization  
-- **Generic Repository Pattern**  
-- **Swagger for API Documentation**  
-- **Dependency Injection (DI)**  
+- .NET Core  
+- Entity Framework Core (EF Core)  
+- SQL Server  
+- JWT Authentication & ASP.NET Core Identity  
+- Generic Repository Pattern  
+- Dependency Injection  
+- Caching (IMemoryCache / IDistributedCache)  
+- Custom Middleware  
+- Global Exception Handling  
+- Custom Action Filters  
+- CORS
+
+## 🔐 Authentication
+This API uses JWT (JSON Web Tokens) with ASP.NET Core Identity to secure endpoints. Tokens are generated upon login and used in the Authorization header as a Bearer token.
+
+## 🌐 CORS
+Cross-Origin Resource Sharing is configured to allow secure communication between the API and front-end applications hosted on different origins.
+
 
 ## 🚀 **Getting Started**  
 
